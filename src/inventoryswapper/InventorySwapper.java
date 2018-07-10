@@ -72,6 +72,7 @@ public class InventorySwapper {
         
   //      PrioritySplitter sortSource = new PrioritySplitter(sugarList);
   //      sortSource.split();
+  //TEST GITHUB COMMIT
         int swapAmount = 2477;
         CombinationFinder finder = new CombinationFinder(swapAmount,sugarList); //Amount to Find
         finder.findCombination();
