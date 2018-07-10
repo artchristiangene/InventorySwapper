@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class PrioritySplitter {
     private final ArrayList<Sugar> sugarList;
-    private final ArrayList<SugarType> sugarTypeSorted;
+    private final ArrayList<SugarClass> sugarTypeSorted;
     
     public PrioritySplitter(ArrayList<Sugar> sugars){
         this.sugarList = sugars;
@@ -30,19 +30,19 @@ public class PrioritySplitter {
                 sugarListPerPriority.add(sugar);
             }
             else{
-                this.sugarTypeSorted.add(new SugarType(sugarListPerPriority, currentPriority));
+                this.sugarTypeSorted.add(new SugarClass(sugarListPerPriority, currentPriority));
                 sugarListPerPriority = new ArrayList<>();
                 sugarListPerPriority.add(sugar);
             }
             currentPriority = sugar.getPriority();            
         }
-        this.sugarTypeSorted.add(new SugarType(sugarListPerPriority, currentPriority));
+        this.sugarTypeSorted.add(new SugarClass(sugarListPerPriority, currentPriority));
     }
 
     /**
      * @return the sugarTypeSorted
      */
-    public ArrayList<SugarType> getSugarTypeSorted() {
+    public ArrayList<SugarClass> getSugarTypeSorted() {
         return sugarTypeSorted;
     }
 }

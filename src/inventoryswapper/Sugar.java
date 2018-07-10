@@ -15,11 +15,13 @@ public class Sugar {
     private Date priority;
     private int bags = 0;
     private String mill = "";
+    private String sugarClass = "";
     
-    public Sugar(Date priority, int bags, String millName){
+    public Sugar(Date priority, int bags, String millName, String sugarClass){
         this.priority = priority;
         this.bags = bags;
         this.mill = millName;
+        this.sugarClass = sugarClass;
     }
 
     /**
@@ -48,5 +50,19 @@ public class Sugar {
      */
     public void setMill(String mill) {
         this.mill = mill;
+    }
+
+    /**
+     * @return the sugarClass
+     */
+    public String getSugarClass() {
+        return sugarClass;
+    }
+
+    /**
+     * @param sugarClass the sugarClass to set
+     */
+    public void setSugarClass(String sugarClass) {
+        this.sugarClass = sugarClass;
     }
 }

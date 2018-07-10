@@ -12,27 +12,27 @@ import java.util.Date;
  *
  * @author Acer
  */
-public class SugarType {
-    private String sugarName;
-    private final ArrayList<Sugar> sugarList;
+public class SugarClass {
+    private String sugarClass;
+    private ArrayList<Sugar> sugarList;
     private Date priority;
     
-    public SugarType(){
+    public SugarClass(){
         this.sugarList = new ArrayList<>();
     }
     
-    public SugarType(String name){
-        this.sugarName = name;
+    public SugarClass(String name){
+        this.sugarClass = name;
         this.sugarList = new ArrayList<>();
     }
     
-    public SugarType(ArrayList<Sugar> sugars, Date priority){
+    public SugarClass(ArrayList<Sugar> sugars, Date priority){
         this.sugarList = sugars;
         this.priority = priority;
     }
     
-    public String getSugarName(){
-        return this.sugarName;
+    public String getSugarClass(){
+        return this.sugarClass;
     }
 
     /**
@@ -70,6 +70,13 @@ public class SugarType {
      */
     public void setPriority(Date priority) {
         this.priority = priority;
+    }
+
+    /**
+     * @param sugarList the sugarList to set
+     */
+    public void setSugarList(ArrayList<Sugar> sugarList) {
+        this.sugarList = sugarList;
     }
     
    

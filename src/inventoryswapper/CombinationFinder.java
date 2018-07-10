@@ -17,22 +17,24 @@ import java.util.Collections;
 public class CombinationFinder {
     
     private final int swapAmount;
-    private ArrayList<Sugar> foundCombination;
+    //private final ArrayList<Sugar> foundCombination;
     ArrayList<Sugar> sugars;
     //private boolean[][] dp;
     
     public CombinationFinder(int forSwapping, ArrayList<Sugar> sugars){
         this.swapAmount = forSwapping;
         this.sugars = sugars;
-        this.foundCombination = new ArrayList<>();
+       // this.foundCombination = new ArrayList<>();
     }
     
-    public void findCombination(){
+    public SugarClass findCombination(){
         //int arr[] = {2,2,5,5,10,10,20,20,20,20,25,25,25,25,30,30,30,30,35,35,35,35,40,40,40,40,45,45,45,45,70,70,200,200,800,800,1000,};
         int n = sugars.size();
         boolean[][] proglist = findAllSubsets(sugars, n, swapAmount);
-        
-        printSugarlist(getOneSubset(proglist, sugars.size(), sugars, swapAmount));
+        SugarClass foundSugar = new SugarClass("Found");
+        foundSugar.setSugarList(getOneSubset(proglist, sugars.size(), sugars, swapAmount));
+        printSugarlist(foundSugar.getSugarList());
+        return foundSugar;
 //        printFirstCombination();
     }
     
@@ -62,7 +64,7 @@ public class CombinationFinder {
                                          : dp[i - 1][j];
         if (dp[n-1][sum] == false)
         {
-            System.out.println("There are no combinations with" + " sum "+ sum + " found.");
+            System.out.println("There are no combinations found.");
             return dp;         
         }
       
@@ -163,7 +165,7 @@ public class CombinationFinder {
         Collections.reverse(sugarList);
         DateFormat df = new SimpleDateFormat("MM/dd/yy");
             if(!sugarList.isEmpty()){
-                System.out.println("Found Combination with sum " + swapAmount);
+                System.out.println("Found Combination");
                 System.out.println("MILL\t WEEK ENDING\t TYPE\tPCS");
                 for(Sugar sugar: sugarList){
                 System.out.println(sugar.getMill() + " \t" + df.format(sugar.getPriority()) + "\t" +"B\t"+ sugar.getBags());

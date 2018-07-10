@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Mill {
     final String millName;
-    private ArrayList<SugarType> millInventory = new ArrayList<>();
+    private ArrayList<SugarClass> millInventory = new ArrayList<>();
     
     public Mill(String name){
         this.millName = name;
@@ -23,21 +23,26 @@ public class Mill {
         return this.millName;
     }
     
-    public void addMillInventory(SugarType sugarType){
+    public void addMillInventory(SugarClass sugarType){
         this.millInventory.add(sugarType);
     }
 
     /**
      * @return the millInventory
      */
-    public ArrayList<SugarType> getMillInventory() {
+    public ArrayList<SugarClass> getMillInventory() {
         return millInventory;
     }
 
     /**
      * @param millInventory the millInventory to set
      */
-    public void setMillInventory(ArrayList<SugarType> millInventory) {
+    public void setMillInventory(ArrayList<SugarClass> millInventory) {
         this.millInventory = millInventory;
+    }
+    
+    @Override
+    public String toString(){
+        return this.millName;
     }
 }
