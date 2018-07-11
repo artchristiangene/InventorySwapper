@@ -12,16 +12,17 @@ import java.util.ArrayList;
  * @author Acer
  */
 public class Mill {
-    final String millName;
+    private String millName = "";
     private ArrayList<SugarClass> millInventory = new ArrayList<>();
     
     public Mill(String name){
         this.millName = name;
     }
     
-    public String getName(){
-        return this.millName;
+    public Mill(){
+
     }
+
     
     public void addMillInventory(SugarClass sugarType){
         this.millInventory.add(sugarType);
@@ -43,6 +44,20 @@ public class Mill {
     
     @Override
     public String toString(){
-        return this.millName;
+        return this.getMillName();
+    }
+
+    /**
+     * @return the millName
+     */
+    public String getMillName() {
+        return millName;
+    }
+
+    /**
+     * @param millName the millName to set
+     */
+    public void setMillName(String millName) {
+        this.millName = millName;
     }
 }

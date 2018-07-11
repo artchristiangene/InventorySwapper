@@ -18,20 +18,19 @@ public class InventorySwapper {
     /**
      * @param args the command line arguments
      */
-    private final Mill millArt;
-    private final Mill millOweng;
-    private final Mill millStan;
+    private ArrayList<Mill> millList;
+    private String sourcePath = "";
     
     public InventorySwapper(){
-        millArt = MillCreator.createMillArt();
-        millOweng = MillCreator.createMillOweng();
-        millStan = MillCreator.createMillStan();
-        ArrayList<Mill> swapMill = new ArrayList<>();
-        swapMill.add(millOweng);
-        swapMill.add(millStan);
-//        checkSwapping(millArt, "A", swapInventory);
-        checkSwapping(millArt, swapMill, "A","A", 2477);
+        millList = new ArrayList<>();
     }
+    
+//    public InventorySwapper(String excel){
+//        MillCreator millCreator = new MillCreator("excel");
+//        millList = millCreator.getMillList();
+//    }
+    
+    
     
     public ArrayList<SugarClass> checkSwapping(Mill sourceMill, ArrayList<Mill> swapMills, String sugarSourceClass,String sugarSwapClass, int swapAmount){
         ArrayList<Sugar> sourceSugar;
@@ -40,7 +39,7 @@ public class InventorySwapper {
         sourceSugar = getSugarFromMill(sourceMill, sugarSourceClass);
         swapSugar = getSwapSugars(swapMills, sugarSwapClass);
         
-        System.out.println("Source Inventory has " + sourceSugar.size()+ " items");
+//        System.out.println("Source Inventory has " + sourceSugar.size()+ " items");
 //        for(int ctr = 0; ctr < sugarList.size(); ctr++){
 //            System.out.println(sugarList.get(ctr).getMill() + " " + sugarList.get(ctr).getPriority() + " " + sugarList.get(ctr).getBags());
 //        }
@@ -73,42 +72,24 @@ public class InventorySwapper {
         
         CombinationFinder finder = new CombinationFinder(swapAmount,sourceSugar); //Amount to Find
         foundCombinations.add(finder.findCombination());
+        if(!foundCombinations.isEmpty()){
+            Collections.sort(swapSugar, new Comparator<Sugar>(){
+                @Override
+                public int compare(Sugar s1, Sugar s2){
+                    return s1.getPriority().compareTo(s2.getPriority());
+                }
+            });
+    //        System.out.println("");
+    //        System.out.println("Swapping Inventory has " + swapSugar.size()+ " items");
+    //        System.out.println("Sorted by Priority");
+    //        for(int ctr = 0; ctr < swapList.size(); ctr++){
+    //            System.out.println(swapList.get(ctr).getMill() + " " + swapList.get(ctr).getPriority() + " " + swapList.get(ctr).getBags());
+    //        }
+            CombinationFinder swapFinder = new CombinationFinder(swapAmount,swapSugar);
+            foundCombinations.add(swapFinder.findCombination());  
+        }
         
-        Collections.sort(swapSugar, new Comparator<Sugar>(){
-            @Override
-            public int compare(Sugar s1, Sugar s2){
-                return s1.getPriority().compareTo(s2.getPriority());
-            }
-        });
-        System.out.println("");
-        System.out.println("Swapping Inventory has " + swapSugar.size()+ " items");
-//        System.out.println("Sorted by Priority");
-//        for(int ctr = 0; ctr < swapList.size(); ctr++){
-//            System.out.println(swapList.get(ctr).getMill() + " " + swapList.get(ctr).getPriority() + " " + swapList.get(ctr).getBags());
-//        }
-        CombinationFinder swapFinder = new CombinationFinder(swapAmount,swapSugar);
-        foundCombinations.add(swapFinder.findCombination());
         return foundCombinations;
-    }
-        /**
-     * @return the millArt
-     */
-    public Mill getMillArt() {
-        return millArt;
-    }
-
-    /**
-     * @return the millOweng
-     */
-    public Mill getMillOweng() {
-        return millOweng;
-    }
-
-    /**
-     * @return the millStan
-     */
-    public Mill getMillStan() {
-        return millStan;
     }
 
     private ArrayList<Sugar> getSugarFromMill(Mill sourceMill, String sugarSourceClass) {
@@ -133,5 +114,31 @@ public class InventorySwapper {
             }
         }
         return sugarList;
+    }
+
+    /**
+     * @return the millList
+     */
+    public ArrayList<Mill> getMillList() {
+        return millList;
+    }
+
+    /**
+     * @return the sourcePath
+     */
+    public String getSourcePath() {
+        return sourcePath;
+    }
+
+    /**
+     * @param sourcePath the sourcePath to set
+     */
+    public void setSourcePath(String sourcePath) {
+        this.sourcePath = sourcePath;
+    }
+
+    public void initializeMills(String absolutePath) {
+        MillCreator millCreator = new MillCreator(absolutePath);
+        millList = millCreator.getMillList();
     }
 }

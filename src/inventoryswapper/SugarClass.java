@@ -13,7 +13,14 @@ import java.util.Date;
  * @author Acer
  */
 public class SugarClass {
-    private String sugarClass;
+
+    /**
+     * @param sugarClass the sugarClass to set
+     */
+    public void setSugarClass(String sugarClass) {
+        this.sugarClass = sugarClass;
+    }
+    private String sugarClass = "";
     private ArrayList<Sugar> sugarList;
     private Date priority;
     

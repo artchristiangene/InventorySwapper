@@ -33,7 +33,7 @@ public class CombinationFinder {
         boolean[][] proglist = findAllSubsets(sugars, n, swapAmount);
         SugarClass foundSugar = new SugarClass("Found");
         foundSugar.setSugarList(getOneSubset(proglist, sugars.size(), sugars, swapAmount));
-        printSugarlist(foundSugar.getSugarList());
+//        printSugarlist(foundSugar.getSugarList());
         return foundSugar;
 //        printFirstCombination();
     }
@@ -64,7 +64,7 @@ public class CombinationFinder {
                                          : dp[i - 1][j];
         if (dp[n-1][sum] == false)
         {
-            System.out.println("There are no combinations found.");
+//            System.out.println("There are no combinations found.");
             return dp;         
         }
       
@@ -161,16 +161,16 @@ public class CombinationFinder {
         return subset;
     }
 
-    private void printSugarlist(ArrayList<Sugar> sugarList) {
-        Collections.reverse(sugarList);
-        DateFormat df = new SimpleDateFormat("MM/dd/yy");
-            if(!sugarList.isEmpty()){
-                System.out.println("Found Combination");
-                System.out.println("MILL\t WEEK ENDING\t TYPE\tPCS");
-                for(Sugar sugar: sugarList){
-                System.out.println(sugar.getMill() + " \t" + df.format(sugar.getPriority()) + "\t" +"B\t"+ sugar.getBags());
-            }
-        }
-        
-    }
+//    private void printSugarlist(ArrayList<Sugar> sugarList) {
+//        Collections.reverse(sugarList);
+//        DateFormat df = new SimpleDateFormat("MM/dd/yy");
+//            if(!sugarList.isEmpty()){
+//                System.out.println("Found Combination");
+//                System.out.println("MILL\t WEEK ENDING\t TYPE\tPCS");
+//                for(Sugar sugar: sugarList){
+//                System.out.println(sugar.getMill() + " \t" + df.format(sugar.getPriority()) + "\t" +"B\t"+ sugar.getBags());
+//            }
+//        }
+//        
+//    }
 }

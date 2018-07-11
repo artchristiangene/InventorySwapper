@@ -1,7 +1,12 @@
 package com.swapper;
 import inventoryswapper.*;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFileChooser;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -16,22 +21,13 @@ import javax.swing.DefaultComboBoxModel;
 public class Swapper extends javax.swing.JFrame {
 
     private InventorySwapper sugarSwapper;
-    private Mill millArt;
-    private Mill millOweng;
-    private Mill millStan;
     private ArrayList<Mill> millList;
     /**
      * Creates new form NewJFrame
      */
     public Swapper() {
         sugarSwapper = new InventorySwapper();
-        millArt = sugarSwapper.getMillArt();
-        millOweng = sugarSwapper.getMillOweng();
-        millStan = sugarSwapper.getMillStan();
         millList = new ArrayList<>();
-        millList.add(millArt);
-        millList.add(millOweng);
-        millList.add(millStan);
         initComponents();
     }
     
@@ -54,6 +50,9 @@ public class Swapper extends javax.swing.JFrame {
         btnClear = new javax.swing.JButton();
         btnSearch = new javax.swing.JButton();
         swapClassComboBox = new javax.swing.JComboBox<>();
+        btnSelectFile = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        sourceLabel = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblFrom = new javax.swing.JTable();
@@ -77,14 +76,17 @@ public class Swapper extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("TO");
 
-        sourceMIllComboBox.setModel(new DefaultComboBoxModel(new Mill[]{millArt, millOweng, millStan}));
+        sourceMIllComboBox.setModel(new DefaultComboBoxModel(millList.toArray()));
         sourceMIllComboBox.setToolTipText("Select Source Mill");
         sourceMIllComboBox.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        sourceMIllComboBox.setEnabled(false);
 
         txtPcs.setToolTipText("Number of Bags to Swap");
+        txtPcs.setEnabled(false);
 
         sourceClassComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D" }));
         sourceClassComboBox.setToolTipText("Select Swapping Classification");
+        sourceClassComboBox.setEnabled(false);
 
         btnClear.setText("Clear");
         btnClear.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -94,6 +96,7 @@ public class Swapper extends javax.swing.JFrame {
         });
 
         btnSearch.setText("Search Combination");
+        btnSearch.setEnabled(false);
         btnSearch.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnSearchMouseClicked(evt);
@@ -102,6 +105,18 @@ public class Swapper extends javax.swing.JFrame {
 
         swapClassComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D" }));
         swapClassComboBox.setToolTipText("Select Swapping Classification");
+        swapClassComboBox.setEnabled(false);
+
+        btnSelectFile.setText("Select File");
+        btnSelectFile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSelectFileMouseClicked(evt);
+            }
+        });
+
+        jLabel7.setText("Source File:");
+
+        sourceLabel.setText("Select File");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -120,14 +135,24 @@ public class Swapper extends javax.swing.JFrame {
                         .addComponent(swapClassComboBox, 0, 125, Short.MAX_VALUE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(sourceClassComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtPcs, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(54, 54, 54)
-                        .addComponent(btnSearch)))
-                .addContainerGap(269, Short.MAX_VALUE))
+                        .addComponent(btnSearch)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 214, Short.MAX_VALUE)
+                        .addComponent(btnSelectFile))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(sourceClassComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtPcs, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(sourceLabel)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,10 +167,14 @@ public class Swapper extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(swapClassComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(swapClassComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(sourceLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSearch)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnSearch)
+                        .addComponent(btnSelectFile))
                     .addComponent(btnClear))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -263,18 +292,14 @@ public class Swapper extends javax.swing.JFrame {
     private void btnSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchMouseClicked
         ArrayList<Mill> swapMills = new ArrayList<>();
         ArrayList<SugarClass> foundCombinations = new ArrayList<>();
-        
-    
             
-                
-                
         for(Mill mill: millList){
-            if(!mill.getName().equals(((Mill)sourceMIllComboBox.getSelectedItem()).getName())){
+            if(!mill.getMillName().equals(((Mill)sourceMIllComboBox.getSelectedItem()).getMillName())){
                 swapMills.add(mill);
             }
         }
         foundCombinations = sugarSwapper.checkSwapping((Mill)sourceMIllComboBox.getSelectedItem(), 
-                swapMills,sourceClassComboBox.getSelectedItem().toString(),swapClassComboBox.getSelectedItem().toString(),Integer.parseInt(txtPcs.getText()));
+                swapMills,sourceClassComboBox.getSelectedItem().toString(),swapClassComboBox.getSelectedItem().toString(),(int)Double.parseDouble(txtPcs.getText())*100);
             tblFrom.setModel(new javax.swing.table.DefaultTableModel(new String [] {
                 "MILL", "WEEK ENDING", "CLASS", "PCS"
             }, foundCombinations.get(0).getSugarList().size()));
@@ -282,23 +307,50 @@ public class Swapper extends javax.swing.JFrame {
                 "MILL", "WEEK ENDING", "CLASS", "PCS"
             }, foundCombinations.get(1).getSugarList().size()));
         int ctr = 0;
+        DateFormat df = new SimpleDateFormat("MM/dd/yy");
         for(Sugar sugar: foundCombinations.get(0).getSugarList()){
             tblFrom.setValueAt(sugar.getMill(),ctr,0);
-            tblFrom.setValueAt(sugar.getPriority(),ctr,1);
+            tblFrom.setValueAt(df.format(sugar.getPriority()),ctr,1);
             tblFrom.setValueAt(sugar.getSugarClass(),ctr,2);
-            tblFrom.setValueAt(sugar.getBags(),ctr,3);
+            tblFrom.setValueAt((double)sugar.getBags()/100,ctr,3);
             ctr++;
         }
         ctr = 0;
         for(Sugar sugar: foundCombinations.get(1).getSugarList()){
             tblSwap.setValueAt(sugar.getMill(),ctr,0);
-            tblSwap.setValueAt(sugar.getPriority(),ctr,1);
+            tblSwap.setValueAt(df.format(sugar.getPriority()),ctr,1);
             tblSwap.setValueAt(sugar.getSugarClass(),ctr,2);
-            tblSwap.setValueAt(sugar.getBags(),ctr,3);
+            tblSwap.setValueAt((double)sugar.getBags()/100,ctr,3);
             ctr++;
         }
         
     }//GEN-LAST:event_btnSearchMouseClicked
+
+    private void btnSelectFileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSelectFileMouseClicked
+        //Create a file chooser
+        final JFileChooser fc = new JFileChooser();
+        
+        //In response to a button click:
+        int returnVal = fc.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            sugarSwapper.initializeMills(file.getAbsolutePath());
+            millList = sugarSwapper.getMillList();
+            sourceMIllComboBox.setModel(new DefaultComboBoxModel(millList.toArray()));
+            sourceLabel.setText(file.getName());
+            sourceMIllComboBox.setEnabled(true);
+            swapClassComboBox.setEnabled(true);
+            sourceClassComboBox.setEnabled(true);
+            txtPcs.setEnabled(true);
+            btnSearch.setEnabled(true);
+        } else {
+            sourceMIllComboBox.setEnabled(false);
+            swapClassComboBox.setEnabled(false);
+            sourceClassComboBox.setEnabled(false);
+            txtPcs.setEnabled(false);
+            btnSearch.setEnabled(false);
+        }
+    }//GEN-LAST:event_btnSelectFileMouseClicked
 
     /**
      * @param args the command line arguments
@@ -339,17 +391,20 @@ public class Swapper extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnSelectFile;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JComboBox<String> sourceClassComboBox;
+    private javax.swing.JLabel sourceLabel;
     private javax.swing.JComboBox sourceMIllComboBox;
     private javax.swing.JComboBox<String> swapClassComboBox;
     private javax.swing.JTable tblFrom;
