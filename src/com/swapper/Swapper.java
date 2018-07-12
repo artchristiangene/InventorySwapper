@@ -1,12 +1,15 @@
 package com.swapper;
 import inventoryswapper.*;
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -61,6 +64,10 @@ public class Swapper extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblSwap = new javax.swing.JTable();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        lblFromSum = new javax.swing.JLabel();
+        lblToSum = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -137,22 +144,19 @@ public class Swapper extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(54, 54, 54)
                         .addComponent(btnSearch)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 214, Short.MAX_VALUE)
+                        .addGap(48, 48, 48)
                         .addComponent(btnSelectFile))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(sourceClassComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtPcs, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(sourceLabel)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(sourceClassComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtPcs, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(sourceLabel)))
+                .addContainerGap(337, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -183,13 +187,13 @@ public class Swapper extends javax.swing.JFrame {
 
         tblFrom.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "MILL", "WEEK ENDING", "CLASS", "PCS"
+                "MILL", "WEEK ENDING", "CLASS", "PCS", "SERIAL NO"
             }
         ));
         jScrollPane1.setViewportView(tblFrom);
@@ -206,16 +210,24 @@ public class Swapper extends javax.swing.JFrame {
 
         tblSwap.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "MILL", "WEEK ENDING", "CLASS", "PCS"
+                "MILL", "WEEK ENDING", "CLASS", "PCS", "SERIAL NO"
             }
         ));
         jScrollPane2.setViewportView(tblSwap);
+
+        jLabel8.setText("Sum");
+
+        jLabel9.setText("Sum");
+
+        lblFromSum.setText("0");
+
+        lblToSum.setText("0");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -226,19 +238,25 @@ public class Swapper extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel5)
+                        .addGap(52, 52, 52)
+                        .addComponent(jLabel8)
+                        .addGap(64, 64, 64)
+                        .addComponent(lblFromSum)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel6)
-                        .addGap(385, 385, 385))
+                        .addGap(58, 58, 58)
+                        .addComponent(jLabel9)
+                        .addGap(54, 54, 54)
+                        .addComponent(lblToSum)
+                        .addGap(300, 300, 300))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel4))
+                        .addContainerGap(33, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,7 +266,11 @@ public class Swapper extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9)
+                    .addComponent(lblFromSum)
+                    .addComponent(lblToSum))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
@@ -279,7 +301,7 @@ public class Swapper extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -298,30 +320,51 @@ public class Swapper extends javax.swing.JFrame {
                 swapMills.add(mill);
             }
         }
+        BigDecimal swapAmount = new BigDecimal(txtPcs.getText());
+        swapAmount = swapAmount.multiply(new BigDecimal(100));
         foundCombinations = sugarSwapper.checkSwapping((Mill)sourceMIllComboBox.getSelectedItem(), 
-                swapMills,sourceClassComboBox.getSelectedItem().toString(),swapClassComboBox.getSelectedItem().toString(),(int)Double.parseDouble(txtPcs.getText())*100);
-            tblFrom.setModel(new javax.swing.table.DefaultTableModel(new String [] {
-                "MILL", "WEEK ENDING", "CLASS", "PCS"
-            }, foundCombinations.get(0).getSugarList().size()));
-        tblSwap.setModel(new javax.swing.table.DefaultTableModel(new String [] {
-                "MILL", "WEEK ENDING", "CLASS", "PCS"
-            }, foundCombinations.get(1).getSugarList().size()));
-        int ctr = 0;
-        DateFormat df = new SimpleDateFormat("MM/dd/yy");
-        for(Sugar sugar: foundCombinations.get(0).getSugarList()){
-            tblFrom.setValueAt(sugar.getMill(),ctr,0);
-            tblFrom.setValueAt(df.format(sugar.getPriority()),ctr,1);
-            tblFrom.setValueAt(sugar.getSugarClass(),ctr,2);
-            tblFrom.setValueAt((double)sugar.getBags()/100,ctr,3);
-            ctr++;
+        swapMills,sourceClassComboBox.getSelectedItem().toString(),swapClassComboBox.getSelectedItem().toString(),swapAmount.intValue());
+        if(foundCombinations.get(0).getSugarList().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Sorry. No combinations with sum " + swapAmount.divide(new BigDecimal(100)) + " found.");
         }
-        ctr = 0;
-        for(Sugar sugar: foundCombinations.get(1).getSugarList()){
-            tblSwap.setValueAt(sugar.getMill(),ctr,0);
-            tblSwap.setValueAt(df.format(sugar.getPriority()),ctr,1);
-            tblSwap.setValueAt(sugar.getSugarClass(),ctr,2);
-            tblSwap.setValueAt((double)sugar.getBags()/100,ctr,3);
-            ctr++;
+        else{
+            tblFrom.setModel(new javax.swing.table.DefaultTableModel(new String [] {
+                "MILL", "WEEK ENDING", "CLASS", "PCS", "SERIAL NUMBER"
+            }, foundCombinations.get(0).getSugarList().size()));
+            tblSwap.setModel(new javax.swing.table.DefaultTableModel(new String [] {
+                    "MILL", "WEEK ENDING", "CLASS", "PCS", "SERIAL NUMBER"
+                }, foundCombinations.get(1).getSugarList().size()));
+            int ctr = 0;
+            BigDecimal bags;
+            BigDecimal sum = new BigDecimal(0);
+            DateFormat df = new SimpleDateFormat("MM/dd/yy");
+            for(Sugar sugar: foundCombinations.get(0).getSugarList()){
+                tblFrom.setValueAt(sugar.getMill(),ctr,0);
+                tblFrom.setValueAt(df.format(sugar.getPriority()),ctr,1);
+                tblFrom.setValueAt(sugar.getSugarClass(),ctr,2);
+                bags = new BigDecimal(sugar.getBags());
+                bags = bags.divide(new BigDecimal(100));
+                tblFrom.setValueAt(bags.toString(),ctr,3);
+                tblFrom.setValueAt(sugar.getSerialNumber(), ctr, 4);
+                sum = sum.add(bags);
+                ctr++;
+            }
+            lblFromSum.setText(sum.toString());
+            ctr = 0;
+            sum = new BigDecimal(0);
+            for(Sugar sugar: foundCombinations.get(1).getSugarList()){
+                tblSwap.setValueAt(sugar.getMill(),ctr,0);
+                tblSwap.setValueAt(df.format(sugar.getPriority()),ctr,1);
+                tblSwap.setValueAt(sugar.getSugarClass(),ctr,2);
+                bags = new BigDecimal(sugar.getBags());
+                bags = bags.setScale(2, RoundingMode.HALF_DOWN);
+                bags = bags.divide(new BigDecimal(100));
+                tblSwap.setValueAt(bags.toString(),ctr,3);
+                tblSwap.setValueAt(sugar.getSerialNumber(), ctr, 4);
+                sum = sum.add(bags);
+                ctr++;
+            }
+            lblToSum.setText(sum.toString());
         }
         
     }//GEN-LAST:event_btnSearchMouseClicked
@@ -399,10 +442,14 @@ public class Swapper extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblFromSum;
+    private javax.swing.JLabel lblToSum;
     private javax.swing.JComboBox<String> sourceClassComboBox;
     private javax.swing.JLabel sourceLabel;
     private javax.swing.JComboBox sourceMIllComboBox;

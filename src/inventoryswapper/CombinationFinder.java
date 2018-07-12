@@ -131,12 +131,14 @@ public class CombinationFinder {
 //    }
     
     private ArrayList<Sugar> getOneSubset(boolean[][] dp, int elements, ArrayList<Sugar> arr, int sum){
-       int element = sum;
-       ArrayList<Sugar> subset = new ArrayList<>();
+    int element = sum;
+    ArrayList<Sugar> subset = new ArrayList<>();
+    if(sum!=0){
         for(int check = 0; check < elements; check++){
             if(dp[check][sum]){
                 if(arr.get(check).getBags() == sum){
                     subset.add(arr.get(check));
+                    break;
                 }
                 else {
                     for(int ctr = check; ctr >= 0; ctr--){
@@ -152,12 +154,14 @@ public class CombinationFinder {
                                 }
                             }
                         }
-                        
+
                     }
                 }
                 break;
             }
         }
+    }
+
         return subset;
     }
 

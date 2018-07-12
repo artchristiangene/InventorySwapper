@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -61,6 +63,7 @@ public class MillCreator {
         if(iterator.hasNext()){
             iterator.next();//skip header row
         }
+        int elementCtr = 0;
         while (iterator.hasNext()) {
             Row nextRow = iterator.next();
             Iterator<Cell> cellIterator = nextRow.cellIterator();
@@ -82,7 +85,9 @@ public class MillCreator {
                         sugar.setPriority(new Date(cell.getStringCellValue()));
                         break;
                     case 4:
-                        sugar.setBags((int)(cell.getNumericCellValue()*100));
+                        BigDecimal bags = new BigDecimal(cell.getNumericCellValue());
+                        bags = bags.setScale(2, RoundingMode.HALF_DOWN);
+                        sugar.setBags(bags.multiply(new BigDecimal(100)).intValue());
                         break;
                     default:
                         sugar.setSerialNumber(cell.getStringCellValue());
@@ -91,6 +96,7 @@ public class MillCreator {
                 ctr++;  
             }
             sugarList.add(sugar);
+            elementCtr++;
         }
          
         workbook.close();

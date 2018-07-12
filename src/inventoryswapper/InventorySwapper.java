@@ -72,22 +72,22 @@ public class InventorySwapper {
         
         CombinationFinder finder = new CombinationFinder(swapAmount,sourceSugar); //Amount to Find
         foundCombinations.add(finder.findCombination());
-        if(!foundCombinations.isEmpty()){
-            Collections.sort(swapSugar, new Comparator<Sugar>(){
-                @Override
-                public int compare(Sugar s1, Sugar s2){
-                    return s1.getPriority().compareTo(s2.getPriority());
-                }
-            });
-    //        System.out.println("");
-    //        System.out.println("Swapping Inventory has " + swapSugar.size()+ " items");
-    //        System.out.println("Sorted by Priority");
-    //        for(int ctr = 0; ctr < swapList.size(); ctr++){
-    //            System.out.println(swapList.get(ctr).getMill() + " " + swapList.get(ctr).getPriority() + " " + swapList.get(ctr).getBags());
-    //        }
-            CombinationFinder swapFinder = new CombinationFinder(swapAmount,swapSugar);
-            foundCombinations.add(swapFinder.findCombination());  
-        }
+        
+        Collections.sort(swapSugar, new Comparator<Sugar>(){
+            @Override
+            public int compare(Sugar s1, Sugar s2){
+                return s1.getPriority().compareTo(s2.getPriority());
+            }
+        });
+//        System.out.println("");
+//        System.out.println("Swapping Inventory has " + swapSugar.size()+ " items");
+//        System.out.println("Sorted by Priority");
+//        for(int ctr = 0; ctr < swapList.size(); ctr++){
+//            System.out.println(swapList.get(ctr).getMill() + " " + swapList.get(ctr).getPriority() + " " + swapList.get(ctr).getBags());
+//        }
+        CombinationFinder swapFinder = new CombinationFinder(swapAmount,swapSugar);
+        foundCombinations.add(swapFinder.findCombination());  
+
         
         return foundCombinations;
     }
