@@ -174,10 +174,42 @@ public class CombinationFinder {
         return subset;
     }
     
+//    public BigDecimal getUpperSuggestion(){
+//        BigDecimal upperSuggestion = new BigDecimal(0);
+//        for(int ctr1 = 0; ctr1 < sugars.size(); ctr1++){
+//            for(int ctr2 = swapAmount; ctr2 <= swapAmount + SUGGESTIONRANGE; ctr2++){
+//                if(this.proglist[ctr1][ctr2]){
+//                    upperSuggestion = new BigDecimal(ctr2);
+//                    break;
+//                }
+//            }
+//            if(!upperSuggestion.equals(new BigDecimal(BigInteger.ZERO))){
+//                break;
+//            }
+//        }
+//        return upperSuggestion;
+//    }
+//    
+//    public BigDecimal getLowerSuggestion(){
+//        BigDecimal lowerSuggestion = new BigDecimal(0);
+//        for(int ctr1 = 0; ctr1 < sugars.size(); ctr1++){
+//            for(int ctr2 = swapAmount; ctr2 >= swapAmount - SUGGESTIONRANGE; ctr2--){
+//                if(this.proglist[ctr1][ctr2]){
+//                    lowerSuggestion = new BigDecimal(ctr2);
+//                    break;
+//                }
+//            }
+//            if(!lowerSuggestion.equals(new BigDecimal(BigInteger.ZERO))){
+//                break;
+//            }
+//        }
+//        return lowerSuggestion;
+//    }
+    
     public BigDecimal getUpperSuggestion(){
         BigDecimal upperSuggestion = new BigDecimal(0);
-        for(int ctr1 = 0; ctr1 < sugars.size(); ctr1++){
-            for(int ctr2 = swapAmount; ctr2 <= swapAmount + SUGGESTIONRANGE; ctr2++){
+        for(int ctr2 = swapAmount; ctr2 <= swapAmount + SUGGESTIONRANGE; ctr2++){
+            for(int ctr1 = 0; ctr1 < sugars.size(); ctr1++){
                 if(this.proglist[ctr1][ctr2]){
                     upperSuggestion = new BigDecimal(ctr2);
                     break;
@@ -192,8 +224,8 @@ public class CombinationFinder {
     
     public BigDecimal getLowerSuggestion(){
         BigDecimal lowerSuggestion = new BigDecimal(0);
-        for(int ctr1 = 0; ctr1 < sugars.size(); ctr1++){
-            for(int ctr2 = swapAmount; ctr2 >= swapAmount - SUGGESTIONRANGE; ctr2--){
+        for(int ctr2 = swapAmount; ctr2 >= swapAmount - SUGGESTIONRANGE; ctr2--){
+            for(int ctr1 = 0; ctr1 < sugars.size(); ctr1++){
                 if(this.proglist[ctr1][ctr2]){
                     lowerSuggestion = new BigDecimal(ctr2);
                     break;

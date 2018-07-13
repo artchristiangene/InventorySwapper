@@ -393,6 +393,7 @@ public class Swapper extends javax.swing.JFrame {
         //In response to a button click:
         int returnVal = fc.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
+            clearTable();
             File file = fc.getSelectedFile();
             sugarSwapper.initializeMills(file.getAbsolutePath());
             //sugarSwapper.initializeMills("C:\\Users\\Acer\\Documents\\data.xlsx");//for test purposes
