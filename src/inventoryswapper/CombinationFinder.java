@@ -5,10 +5,9 @@
  */
 package inventoryswapper;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  *
@@ -17,9 +16,10 @@ import java.util.Collections;
 public class CombinationFinder {
     
     private final int swapAmount;
+    public static final int SUGGESTIONRANGE = 200;
     //private final ArrayList<Sugar> foundCombination;
-    ArrayList<Sugar> sugars;
-    //private boolean[][] dp;
+    private ArrayList<Sugar> sugars;
+    private boolean[][] proglist;
     
     public CombinationFinder(int forSwapping, ArrayList<Sugar> sugars){
         this.swapAmount = forSwapping;
@@ -30,9 +30,18 @@ public class CombinationFinder {
     public SugarClass findCombination(){
         //int arr[] = {2,2,5,5,10,10,20,20,20,20,25,25,25,25,30,30,30,30,35,35,35,35,40,40,40,40,45,45,45,45,70,70,200,200,800,800,1000,};
         int n = sugars.size();
-        boolean[][] proglist = findAllSubsets(sugars, n, swapAmount);
+        proglist = findAllSubsets(sugars, n, swapAmount + SUGGESTIONRANGE);//find including suggestion range to avoid reconstruction of progList table
         SugarClass foundSugar = new SugarClass("Found");
-        foundSugar.setSugarList(getOneSubset(proglist, sugars.size(), sugars, swapAmount));
+        foundSugar.setSugarList(getOneSubset(n, sugars, swapAmount));
+//        printSugarlist(foundSugar.getSugarList());
+        return foundSugar;
+//        printFirstCombination();
+    }
+    
+    public SugarClass findLeewayCombination(int swapAmount){
+        //int arr[] = {2,2,5,5,10,10,20,20,20,20,25,25,25,25,30,30,30,30,35,35,35,35,40,40,40,40,45,45,45,45,70,70,200,200,800,800,1000,};
+        SugarClass foundSugar = new SugarClass("FoundLeeway");
+        foundSugar.setSugarList(getOneSubset(sugars.size(), sugars, swapAmount));
 //        printSugarlist(foundSugar.getSugarList());
         return foundSugar;
 //        printFirstCombination();
@@ -130,12 +139,12 @@ public class CombinationFinder {
 //        }    
 //    }
     
-    private ArrayList<Sugar> getOneSubset(boolean[][] dp, int elements, ArrayList<Sugar> arr, int sum){
+    private ArrayList<Sugar> getOneSubset(int elements, ArrayList<Sugar> arr, int sum){
     int element = sum;
     ArrayList<Sugar> subset = new ArrayList<>();
     if(sum!=0){
         for(int check = 0; check < elements; check++){
-            if(dp[check][sum]){
+            if(this.proglist[check][sum]){
                 if(arr.get(check).getBags() == sum){
                     subset.add(arr.get(check));
                     break;
@@ -146,7 +155,7 @@ public class CombinationFinder {
                             subset.add(arr.get(ctr));
                         }
                         else{
-                            if(!dp[ctr-1][element]){
+                            if(!this.proglist[ctr-1][element]){
                                 subset.add(arr.get(ctr));
                                 element = element - arr.get(ctr).getBags();
                                 if(element == 0){
@@ -164,6 +173,38 @@ public class CombinationFinder {
 
         return subset;
     }
+    
+    public BigDecimal getUpperSuggestion(){
+        BigDecimal upperSuggestion = new BigDecimal(0);
+        for(int ctr1 = 0; ctr1 < sugars.size(); ctr1++){
+            for(int ctr2 = swapAmount; ctr2 <= swapAmount + SUGGESTIONRANGE; ctr2++){
+                if(this.proglist[ctr1][ctr2]){
+                    upperSuggestion = new BigDecimal(ctr2);
+                    break;
+                }
+            }
+            if(!upperSuggestion.equals(new BigDecimal(BigInteger.ZERO))){
+                break;
+            }
+        }
+        return upperSuggestion;
+    }
+    
+    public BigDecimal getLowerSuggestion(){
+        BigDecimal lowerSuggestion = new BigDecimal(0);
+        for(int ctr1 = 0; ctr1 < sugars.size(); ctr1++){
+            for(int ctr2 = swapAmount; ctr2 >= swapAmount - SUGGESTIONRANGE; ctr2--){
+                if(this.proglist[ctr1][ctr2]){
+                    lowerSuggestion = new BigDecimal(ctr2);
+                    break;
+                }
+            }
+            if(!lowerSuggestion.equals(new BigDecimal(BigInteger.ZERO))){
+                break;
+            }
+        }
+        return lowerSuggestion;
+    }
 
 //    private void printSugarlist(ArrayList<Sugar> sugarList) {
 //        Collections.reverse(sugarList);
@@ -177,4 +218,11 @@ public class CombinationFinder {
 //        }
 //        
 //    }
+
+    /**
+     * @return the proglist
+     */
+    public boolean[][] getProglist() {
+        return proglist;
+    }
 }

@@ -5,6 +5,7 @@
  */
 package inventoryswapper;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,6 +21,8 @@ public class InventorySwapper {
      */
     private ArrayList<Mill> millList;
     private String sourcePath = "";
+    public static final int LEEWAYAMOUNT = 3;
+    private CombinationFinder finder;
     
     public InventorySwapper(){
         millList = new ArrayList<>();
@@ -68,11 +71,11 @@ public class InventorySwapper {
         
   //      PrioritySplitter sortSource = new PrioritySplitter(sugarList);
   //      sortSource.split();
-  
-        
-        CombinationFinder finder = new CombinationFinder(swapAmount,sourceSugar); //Amount to Find
+
+        finder = new CombinationFinder(swapAmount,sourceSugar); //swapAmount = Amount to Find
         foundCombinations.add(finder.findCombination());
         
+        //Sort swapSugarList by Priority
         Collections.sort(swapSugar, new Comparator<Sugar>(){
             @Override
             public int compare(Sugar s1, Sugar s2){
@@ -86,8 +89,23 @@ public class InventorySwapper {
 //            System.out.println(swapList.get(ctr).getMill() + " " + swapList.get(ctr).getPriority() + " " + swapList.get(ctr).getBags());
 //        }
         CombinationFinder swapFinder = new CombinationFinder(swapAmount,swapSugar);
-        foundCombinations.add(swapFinder.findCombination());  
-
+        SugarClass foundSwapSugars = swapFinder.findCombination();
+        if(foundSwapSugars.getSugarList().isEmpty()){
+            for(int ctr = 1; ctr <= 3; ctr++){
+                foundSwapSugars = swapFinder.findLeewayCombination(swapAmount + ctr);
+                if(!foundSwapSugars.getSugarList().isEmpty()){
+                    break;
+                }
+                else {
+                    foundSwapSugars = swapFinder.findLeewayCombination(swapAmount - ctr);
+                    if(!foundSwapSugars.getSugarList().isEmpty()){
+                        break;
+                    }
+                }
+            }
+        }
+        foundCombinations.add(foundSwapSugars);
+        
         
         return foundCombinations;
     }
@@ -140,5 +158,12 @@ public class InventorySwapper {
     public void initializeMills(String absolutePath) {
         MillCreator millCreator = new MillCreator(absolutePath);
         millList = millCreator.getMillList();
+    }
+    
+    public BigDecimal getUpperSuggestion(){
+        return finder.getUpperSuggestion();
+    }
+    public BigDecimal getLowerSuggestion(){
+        return finder.getLowerSuggestion();
     }
 }
