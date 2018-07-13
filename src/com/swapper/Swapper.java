@@ -325,6 +325,7 @@ public class Swapper extends javax.swing.JFrame {
             foundCombinations = sugarSwapper.checkSwapping((Mill)sourceMIllComboBox.getSelectedItem(), 
             swapMills,sourceClassComboBox.getSelectedItem().toString(),swapClassComboBox.getSelectedItem().toString(),swapAmount.intValue());
             if(foundCombinations.get(0).getSugarList().isEmpty()){
+                clearTable();
                 String message = "Sorry. No combinations with sum " + swapAmount.divide(new BigDecimal(100)) + " found.";
                 if((!sugarSwapper.getLowerSuggestion().equals(new BigDecimal(0)))||(!sugarSwapper.getUpperSuggestion().equals(new BigDecimal(0)))){
                     message = message + "\n" + "Nearest possible total found are:\n";
@@ -387,29 +388,29 @@ public class Swapper extends javax.swing.JFrame {
 
     private void btnSelectFileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSelectFileMouseClicked
         //Create a file chooser
-        //final JFileChooser fc = new JFileChooser();
+        final JFileChooser fc = new JFileChooser();
         
         //In response to a button click:
-  //      int returnVal = fc.showOpenDialog(this);
-//        if (returnVal == JFileChooser.APPROVE_OPTION) {
-       //     File file = fc.getSelectedFile();
-           // sugarSwapper.initializeMills(file.getAbsolutePath());
-            sugarSwapper.initializeMills("C:\\Users\\Acer\\Documents\\data.xlsx");
+        int returnVal = fc.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            sugarSwapper.initializeMills(file.getAbsolutePath());
+            //sugarSwapper.initializeMills("C:\\Users\\Acer\\Documents\\data.xlsx");//for test purposes
             millList = sugarSwapper.getMillList();
             sourceMIllComboBox.setModel(new DefaultComboBoxModel(millList.toArray()));
-        //    sourceLabel.setText(file.getName());
+            sourceLabel.setText(file.getName());
             sourceMIllComboBox.setEnabled(true);
             swapClassComboBox.setEnabled(true);
             sourceClassComboBox.setEnabled(true);
             txtPcs.setEnabled(true);
             btnSearch.setEnabled(true);
-//        } else {
-//            sourceMIllComboBox.setEnabled(false);
-//            swapClassComboBox.setEnabled(false);
-//            sourceClassComboBox.setEnabled(false);
-//            txtPcs.setEnabled(false);
-//            btnSearch.setEnabled(false);
-//        }
+        } else {
+            sourceMIllComboBox.setEnabled(false);
+            swapClassComboBox.setEnabled(false);
+            sourceClassComboBox.setEnabled(false);
+            txtPcs.setEnabled(false);
+            btnSearch.setEnabled(false);
+        }
     }//GEN-LAST:event_btnSelectFileMouseClicked
 
     private void clearTable(){
