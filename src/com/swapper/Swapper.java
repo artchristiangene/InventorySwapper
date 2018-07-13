@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
  */
 public class Swapper extends javax.swing.JFrame {
 
-    private InventorySwapper sugarSwapper;
+    private final InventorySwapper sugarSwapper;
     private ArrayList<Mill> millList;
     /**
      * Creates new form NewJFrame
@@ -308,93 +308,118 @@ public class Swapper extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnClearMouseClicked
-        
+        clearTable();
     }//GEN-LAST:event_btnClearMouseClicked
 
     private void btnSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchMouseClicked
         ArrayList<Mill> swapMills = new ArrayList<>();
-        ArrayList<SugarClass> foundCombinations = new ArrayList<>();
-            
-        for(Mill mill: millList){
-            if(!mill.getMillName().equals(((Mill)sourceMIllComboBox.getSelectedItem()).getMillName())){
-                swapMills.add(mill);
+        ArrayList<SugarClass> foundCombinations;
+        if(!sourceClassComboBox.getSelectedItem().toString().equals(swapClassComboBox.getSelectedItem().toString())){    
+            for(Mill mill: millList){
+                if(!mill.getMillName().equals(((Mill)sourceMIllComboBox.getSelectedItem()).getMillName())){
+                    swapMills.add(mill);
+                }
             }
-        }
-        BigDecimal swapAmount = new BigDecimal(txtPcs.getText());
-        swapAmount = swapAmount.multiply(new BigDecimal(100));
-        foundCombinations = sugarSwapper.checkSwapping((Mill)sourceMIllComboBox.getSelectedItem(), 
-        swapMills,sourceClassComboBox.getSelectedItem().toString(),swapClassComboBox.getSelectedItem().toString(),swapAmount.intValue());
-        if(foundCombinations.get(0).getSugarList().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Sorry. No combinations with sum " + swapAmount.divide(new BigDecimal(100)) + " found.");
+            BigDecimal swapAmount = new BigDecimal(txtPcs.getText());
+            swapAmount = swapAmount.multiply(new BigDecimal(100));
+            foundCombinations = sugarSwapper.checkSwapping((Mill)sourceMIllComboBox.getSelectedItem(), 
+            swapMills,sourceClassComboBox.getSelectedItem().toString(),swapClassComboBox.getSelectedItem().toString(),swapAmount.intValue());
+            if(foundCombinations.get(0).getSugarList().isEmpty()){
+                String message = "Sorry. No combinations with sum " + swapAmount.divide(new BigDecimal(100)) + " found.";
+                if((!sugarSwapper.getLowerSuggestion().equals(new BigDecimal(0)))||(!sugarSwapper.getUpperSuggestion().equals(new BigDecimal(0)))){
+                    message = message + "\n" + "Nearest possible total found are:\n";
+                    if(!sugarSwapper.getLowerSuggestion().equals(new BigDecimal(0))){
+                        message = message + "Lower: " + sugarSwapper.getLowerSuggestion().divide(new BigDecimal(100)) + "\n";
+                    }
+                    if(!sugarSwapper.getUpperSuggestion().equals(new BigDecimal(0))){
+                        message = message + "Upper: " + sugarSwapper.getUpperSuggestion().divide(new BigDecimal(100)); 
+                    }
+                }
+                        
+                        
+                        
+                JOptionPane.showMessageDialog(this, message);
+            }
+            else{
+                tblFrom.setModel(new javax.swing.table.DefaultTableModel(new String [] {
+                    "MILL", "WEEK ENDING", "CLASS", "PCS", "SERIAL NUMBER"
+                }, foundCombinations.get(0).getSugarList().size()));
+                tblSwap.setModel(new javax.swing.table.DefaultTableModel(new String [] {
+                        "MILL", "WEEK ENDING", "CLASS", "PCS", "SERIAL NUMBER"
+                    }, foundCombinations.get(1).getSugarList().size()));
+                int ctr = 0;
+                BigDecimal bags;
+                BigDecimal sum = new BigDecimal(0);
+                DateFormat df = new SimpleDateFormat("MM/dd/yy");
+                for(Sugar sugar: foundCombinations.get(0).getSugarList()){
+                    tblFrom.setValueAt(sugar.getMill(),ctr,0);
+                    tblFrom.setValueAt(df.format(sugar.getPriority()),ctr,1);
+                    tblFrom.setValueAt(sugar.getSugarClass(),ctr,2);
+                    bags = new BigDecimal(sugar.getBags());
+                    bags = bags.divide(new BigDecimal(100));
+                    tblFrom.setValueAt(bags.toString(),ctr,3);
+                    tblFrom.setValueAt(sugar.getSerialNumber(), ctr, 4);
+                    sum = sum.add(bags);
+                    ctr++;
+                }
+                lblFromSum.setText(sum.toString());
+                ctr = 0;
+                sum = new BigDecimal(0);
+                for(Sugar sugar: foundCombinations.get(1).getSugarList()){
+                    tblSwap.setValueAt(sugar.getMill(),ctr,0);
+                    tblSwap.setValueAt(df.format(sugar.getPriority()),ctr,1);
+                    tblSwap.setValueAt(sugar.getSugarClass(),ctr,2);
+                    bags = new BigDecimal(sugar.getBags());
+                    bags = bags.setScale(2, RoundingMode.HALF_DOWN);
+                    bags = bags.divide(new BigDecimal(100));
+                    tblSwap.setValueAt(bags.toString(),ctr,3);
+                    tblSwap.setValueAt(sugar.getSerialNumber(), ctr, 4);
+                    sum = sum.add(bags);
+                    ctr++;
+                }
+                lblToSum.setText(sum.toString());
+            }
         }
         else{
-            tblFrom.setModel(new javax.swing.table.DefaultTableModel(new String [] {
-                "MILL", "WEEK ENDING", "CLASS", "PCS", "SERIAL NUMBER"
-            }, foundCombinations.get(0).getSugarList().size()));
-            tblSwap.setModel(new javax.swing.table.DefaultTableModel(new String [] {
-                    "MILL", "WEEK ENDING", "CLASS", "PCS", "SERIAL NUMBER"
-                }, foundCombinations.get(1).getSugarList().size()));
-            int ctr = 0;
-            BigDecimal bags;
-            BigDecimal sum = new BigDecimal(0);
-            DateFormat df = new SimpleDateFormat("MM/dd/yy");
-            for(Sugar sugar: foundCombinations.get(0).getSugarList()){
-                tblFrom.setValueAt(sugar.getMill(),ctr,0);
-                tblFrom.setValueAt(df.format(sugar.getPriority()),ctr,1);
-                tblFrom.setValueAt(sugar.getSugarClass(),ctr,2);
-                bags = new BigDecimal(sugar.getBags());
-                bags = bags.divide(new BigDecimal(100));
-                tblFrom.setValueAt(bags.toString(),ctr,3);
-                tblFrom.setValueAt(sugar.getSerialNumber(), ctr, 4);
-                sum = sum.add(bags);
-                ctr++;
-            }
-            lblFromSum.setText(sum.toString());
-            ctr = 0;
-            sum = new BigDecimal(0);
-            for(Sugar sugar: foundCombinations.get(1).getSugarList()){
-                tblSwap.setValueAt(sugar.getMill(),ctr,0);
-                tblSwap.setValueAt(df.format(sugar.getPriority()),ctr,1);
-                tblSwap.setValueAt(sugar.getSugarClass(),ctr,2);
-                bags = new BigDecimal(sugar.getBags());
-                bags = bags.setScale(2, RoundingMode.HALF_DOWN);
-                bags = bags.divide(new BigDecimal(100));
-                tblSwap.setValueAt(bags.toString(),ctr,3);
-                tblSwap.setValueAt(sugar.getSerialNumber(), ctr, 4);
-                sum = sum.add(bags);
-                ctr++;
-            }
-            lblToSum.setText(sum.toString());
+            JOptionPane.showMessageDialog(this, "WARNING! Swapping Classifications are the Same.");
         }
-        
     }//GEN-LAST:event_btnSearchMouseClicked
 
     private void btnSelectFileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSelectFileMouseClicked
         //Create a file chooser
-        final JFileChooser fc = new JFileChooser();
+        //final JFileChooser fc = new JFileChooser();
         
         //In response to a button click:
-        int returnVal = fc.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
-            sugarSwapper.initializeMills(file.getAbsolutePath());
+  //      int returnVal = fc.showOpenDialog(this);
+//        if (returnVal == JFileChooser.APPROVE_OPTION) {
+       //     File file = fc.getSelectedFile();
+           // sugarSwapper.initializeMills(file.getAbsolutePath());
+            sugarSwapper.initializeMills("C:\\Users\\Acer\\Documents\\data.xlsx");
             millList = sugarSwapper.getMillList();
             sourceMIllComboBox.setModel(new DefaultComboBoxModel(millList.toArray()));
-            sourceLabel.setText(file.getName());
+        //    sourceLabel.setText(file.getName());
             sourceMIllComboBox.setEnabled(true);
             swapClassComboBox.setEnabled(true);
             sourceClassComboBox.setEnabled(true);
             txtPcs.setEnabled(true);
             btnSearch.setEnabled(true);
-        } else {
-            sourceMIllComboBox.setEnabled(false);
-            swapClassComboBox.setEnabled(false);
-            sourceClassComboBox.setEnabled(false);
-            txtPcs.setEnabled(false);
-            btnSearch.setEnabled(false);
-        }
+//        } else {
+//            sourceMIllComboBox.setEnabled(false);
+//            swapClassComboBox.setEnabled(false);
+//            sourceClassComboBox.setEnabled(false);
+//            txtPcs.setEnabled(false);
+//            btnSearch.setEnabled(false);
+//        }
     }//GEN-LAST:event_btnSelectFileMouseClicked
 
+    private void clearTable(){
+        tblFrom.setModel(new javax.swing.table.DefaultTableModel(new String [] {
+            "MILL", "WEEK ENDING", "CLASS", "PCS", "SERIAL NUMBER"
+            }, 4));
+        tblSwap.setModel(new javax.swing.table.DefaultTableModel(new String [] {
+            "MILL", "WEEK ENDING", "CLASS", "PCS", "SERIAL NUMBER"
+            }, 4));
+}
     /**
      * @param args the command line arguments
      */
